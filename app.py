@@ -4,6 +4,7 @@ from pathlib import Path
 import itertools
 __version__ = "1.1"
 
+st.write("🔥 Hello from the top of app.py!")
 st.set_page_config(page_title=f"Midjourney Prompter {__version__} (Editable)", layout="centered")
 st.title(f"Midjourney Prompter v{__version__}")
 
