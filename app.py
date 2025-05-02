@@ -21,7 +21,8 @@ st.title(f"Midjourney Prompter v{__version__}")
 def load_json(name):
     try:
         return json.load(open(Path("data") / f"{name}.json"))
-    except:
+    except FileNotFoundError as e:
+        print(f"Error loading {name}.json\n{e.str()}")
         return []
 
 artists = load_json("artists")
