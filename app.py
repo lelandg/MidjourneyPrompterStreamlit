@@ -74,7 +74,7 @@ with tab1:
                     )
                 st.markdown("<div style='margin-bottom:12px;'></div>", unsafe_allow_html=True)
         else:
-            cols = st.columns(len(preview_colors))
+            cols = st.columns(max(1, len(preview_colors)))
             for col, hexcode in zip(cols, preview_colors):
                 col.markdown(
                     f"<div style='background:{hexcode};width:40px;height:40px;"
