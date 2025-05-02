@@ -1,76 +1,80 @@
 import streamlit as st
+import json
+from pathlib import Path
+import itertools
 
-st.set_page_config(page_title="Advanced Midjourney Prompt Builder", layout="centered")
-st.title("Advanced Midjourney Prompt Builder")
-st.markdown("Craft rich, detailed prompts for Midjourney using both creative and technical controls.")
+st.set_page_config(page_title="Midjourney Prompter v3.4+ (Editable)", layout="centered")
+st.title("Midjourney Prompter v3.4+")
 
-# Section 1: Base Prompt
-st.header("1. Base Prompt")
-prompt = st.text_input("Main Description", placeholder="A futuristic city at sunset")
+# Load editable values
+def load_json(name):
+    try:
+        return json.load(open(Path("data") / f"{name}.json"))
+    except:
+        return []
 
-# Section 2: Descriptors
-st.header("2. Descriptors")
-subject = st.text_input("Subject", placeholder="robot, forest, mountain")
-environment = st.text_input("Environment", placeholder="dense fog, underwater, outer space")
-lighting = st.text_input("Lighting", placeholder="cinematic lighting, soft shadows, golden hour")
-mood = st.text_input("Mood", placeholder="serene, intense, dystopian")
+artists = load_json("artists")
+styles = load_json("styles")
+mediums = load_json("mediums")
 
-# Section 3: Artistic Style
-st.header("3. Artistic Style")
-art_style = st.selectbox("Art Style / Movement", ["None", "Cyberpunk", "Impressionism", "Surrealism", "Baroque", "Anime", "Vaporwave", "Minimalism"])
-medium = st.selectbox("Medium", ["None", "Oil painting", "Digital art", "Pencil sketch", "Watercolor", "3D render", "Photo"])
-artist_reference = st.text_input("Artist Reference", placeholder="Greg Rutkowski, Beeple")
+tab1, tab2, tab3 = st.tabs(["🎯 Single Prompt", "🌀 Batch Mode", "🛠️ Edit Lists"])
 
-# Section 4: Camera Settings
-st.header("4. Camera Settings (for photo realism)")
-camera_type = st.selectbox("Camera Type", ["None", "DSLR", "Mirrorless", "Smartphone", "Polaroid", "Film"])
-lens = st.text_input("Lens", placeholder="85mm, wide-angle, fisheye")
-aperture = st.text_input("Aperture", placeholder="f/1.4, f/5.6")
-
-# Section 5: Midjourney Parameters
-st.header("5. Midjourney Parameters")
-col1, col2 = st.columns(2)
-with col1:
+with tab1:
+    st.header("Build a Single Prompt")
+    subject = st.text_input("Subject")
+    mood = st.text_input("Mood")
+    lighting = st.text_input("Lighting")
+    color = st.text_input("Color Scheme")
+    artist = st.selectbox("Artist", ["None"] + artists)
+    style = st.selectbox("Style", ["None"] + styles)
+    medium = st.selectbox("Medium", ["None"] + mediums)
     version = st.selectbox("Model Version (--v)", ["6", "5.2", "5.1", "5", "4"])
-    aspect_ratio = st.selectbox("Aspect Ratio (--ar)", ["1:1", "16:9", "4:5", "2:3", "3:2", "9:16"])
-    quality = st.selectbox("Quality (--q)", ["1", "0.5", "2"])
-    stylization = st.slider("Stylization (--s)", 0, 1000, 250, step=50)
-with col2:
-    style = st.selectbox("Style (--style)", ["default", "raw", "4a", "4b", "4c"])
-    chaos = st.slider("Chaos (--chaos)", 0, 100, 0, step=5)
-    seed = st.text_input("Seed (--seed)", placeholder="Leave blank for random")
+    aspect = st.selectbox("Aspect Ratio (--ar)", ["1:1", "16:9", "4:5", "2:3", "3:2", "9:16"])
 
-no_param = st.text_input("Exclude Items (--no)", placeholder="e.g., text, people, watermarks")
+    parts = [subject, mood, lighting, color]
+    if medium != "None": parts.append(medium)
+    if style != "None": parts.append(style)
+    if artist != "None": parts.append(f"by {artist}")
+    prompt = ", ".join(filter(None, parts))
+    final = f"{prompt} --v {version} --ar {aspect}"
+    st.text_area("Final Prompt", final, height=100)
 
-# Section 6: Image Prompt
-st.header("6. Optional Image Prompt")
-image_url = st.text_input("Image URL", placeholder="https://example.com/image.jpg")
-image_weight = st.slider("Image Weight (--iw)", 0.0, 2.0, 1.0, step=0.1)
+with tab2:
+    st.header("Batch Prompt Generator")
+    st.markdown("Enter comma-separated values for batch combination:")
 
-# Build final prompt
-components = [
-    prompt, subject, environment, lighting, mood,
-    art_style if art_style != "None" else "",
-    medium if medium != "None" else "",
-    artist_reference,
-    camera_type if camera_type != "None" else "",
-    lens, aperture
-]
-base_prompt = ", ".join(filter(None, components))
+    col1, col2 = st.columns(2)
+    with col1:
+        subjects = st.text_input("Subjects", "robot, dragon, astronaut")
+        moods = st.text_input("Moods", "serene, dystopian, joyful")
+        styles_batch = st.multiselect("Styles", styles, default=["Cyberpunk", "Fantasy"])
+    with col2:
+        lightings = st.text_input("Lighting", "cinematic lighting, golden hour")
+        mediums_batch = st.multiselect("Mediums", mediums, default=["Digital art", "3D render"])
+        artists_batch = st.multiselect("Artists", artists, default=["Greg Rutkowski", "Beeple"])
 
-final_prompt = base_prompt
-if image_url: final_prompt = f"{image_url} --iw {image_weight} " + final_prompt
-if version: final_prompt += f" --v {version}"
-if style and style != "default": final_prompt += f" --style {style}"
-if aspect_ratio: final_prompt += f" --ar {aspect_ratio}"
-if quality: final_prompt += f" --q {quality}"
-if stylization is not None: final_prompt += f" --s {stylization}"
-if chaos is not None: final_prompt += f" --chaos {chaos}"
-if seed: final_prompt += f" --seed {seed}"
-if no_param: final_prompt += f" --no {no_param}"
+    version_b = st.selectbox("Model Version (--v)", ["6", "5.2", "5.1", "5", "4"], key="ver2")
+    aspect_b = st.selectbox("Aspect Ratio (--ar)", ["1:1", "16:9", "4:5", "2:3", "3:2", "9:16"], key="ar2")
 
-st.markdown("### Final Midjourney Prompt")
-st.code(final_prompt, language="bash")
-st.info("Copy this prompt to use in Midjourney via Discord.")
-st.markdown("---")
-st.markdown("Inspired by PrompterGuide.com and extended for modern Midjourney prompts.")
+    combos = list(itertools.product(
+        subjects.split(","), moods.split(","), lightings.split(","),
+        styles_batch, mediums_batch, artists_batch
+    ))
+
+    prompts = []
+    for combo in combos:
+        s, m, l, stl, med, a = [x.strip() for x in combo]
+        prompts.append(f"{s}, {m}, {l}, {med}, {stl}, by {a} --v {version_b} --ar {aspect_b}")
+
+    st.text_area("Generated Prompts", "\n".join(prompts), height=300)
+    st.download_button("📥 Download Prompts as TXT", data="\n".join(prompts), file_name="batch_prompts.txt")
+
+with tab3:
+    st.header("Edit Lists")
+    st.subheader("Artists")
+    st.text_area("artists.json", json.dumps(artists, indent=2), height=150)
+    st.subheader("Styles")
+    st.text_area("styles.json", json.dumps(styles, indent=2), height=150)
+    st.subheader("Mediums")
+    st.text_area("mediums.json", json.dumps(mediums, indent=2), height=150)
+    st.markdown("✂️ Copy this updated JSON and manually update the GitHub version to persist.")
