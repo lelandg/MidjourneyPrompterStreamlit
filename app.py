@@ -1,11 +1,25 @@
+# app.py
 import streamlit as st
+__version__ = "1.1"
+
+# Must be the first Streamlit command!
+st.set_page_config(
+    page_title=f"Midjourney Prompter {__version__} (Editable)",
+    layout="centered",
+)
+
+# --- the rest of your imports and Streamlit code ---
+import numpy as np
+import pandas as pd
+# …etc…
+
+st.title("Midjourney Prompter")
+# …your app logic…
 import json
 from pathlib import Path
 import itertools
-__version__ = "1.1"
 
 st.write("🔥 Hello from the top of app.py!")
-st.set_page_config(page_title=f"Midjourney Prompter {__version__} (Editable)", layout="centered")
 st.title(f"Midjourney Prompter v{__version__}")
 
 # Load editable values
