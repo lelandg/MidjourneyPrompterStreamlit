@@ -41,7 +41,7 @@ with tab1:
     artists_sel = st.multiselect(
         "Artists",
         options=artists,
-        default=[a for a in ["Greg Rutkowski", "Beeple"] if a in artists]
+        default=[a for a in ["Moebius", "Basil Wolverton"] if a in artists]
     )
 
     version = st.selectbox("Model Version (--v)", ["6","5.2","5.1","5","4"])
