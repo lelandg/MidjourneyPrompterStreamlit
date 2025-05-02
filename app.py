@@ -17,14 +17,19 @@ def load_json(name):
 artists = load_json("artists")
 styles = load_json("styles")
 mediums = load_json("mediums")
+moods = load_json("moods")
+lighting = load_json("lighting")
 
 tab1, tab2, tab3 = st.tabs(["🎯 Single Prompt", "🌀 Batch Mode", "🛠️ Edit Lists (Not Saved)"])
 
 with tab1:
     st.header("Build a Single Prompt")
     subject = st.text_input("Subject")
-    mood    = st.text_input("Mood")
-    lighting= st.text_input("Lighting")
+    
+    # Replace mood text_input with selectbox
+    mood = st.selectbox("Mood", moods)
+    
+    lighting_sel = st.selectbox("Lighting", lighting)
     color   = st.text_input("Color Scheme")
 
     # --- now multi-selects with defaults ---
@@ -48,7 +53,7 @@ with tab1:
     aspect  = st.selectbox("Aspect Ratio (--ar)", ["1:1","16:9","4:5","2:3","3:2","9:16"])
 
     # --- build prompt parts ---
-    parts = [subject, mood, lighting, color]
+    parts = [subject, mood, lighting_sel, color]
     parts.extend(mediums_sel)
     parts.extend(styles_sel)
     # prepend "by " to each selected artist
@@ -65,10 +70,13 @@ with tab2:
     col1, col2 = st.columns(2)
     with col1:
         subjects = st.text_input("Subjects", "robot, dragon, astronaut")
-        moods = st.text_input("Moods", "serene, dystopian, joyful")
+        
+        # Replace moods text_input with multiselect or selectbox
+        moods_batch = st.multiselect("Moods", moods, default=["Serene", "Dystopian", "Joyful"], key="moods_batch")
+
         styles_batch = st.multiselect("Styles", styles, default=["Cyberpunk", "Fantasy"], key="styles_batch")
     with col2:
-        lightings = st.text_input("Lighting", "cinematic lighting, golden hour")
+        lightings_batch = st.multiselect("Lighting", lighting, default=["Cinematic lighting", "Golden hour"], key="lightings_batch")
         medium_defaults = [m for m in ["Digital Art", "3D render"] if m in mediums]
         mediums_batch = st.multiselect("Mediums", mediums, default=medium_defaults, key="mediums_batch")
         artists_batch = st.multiselect("Artists", artists, default=["Greg Rutkowski", "Beeple"], key="artists_batch")
@@ -86,7 +94,7 @@ with tab2:
     if not auto_generate:
         if st.button("Generate", key="generate_button"):
             combos = list(itertools.product(
-                subjects.split(","), moods.split(","), lightings.split(","),
+                subjects.split(","), moods_batch, lightings_batch,
                 styles_batch, mediums_batch, artists_batch
             ))
 
@@ -100,7 +108,7 @@ with tab2:
     # If auto_generate is True, generate prompts automatically
     else:
         combos = list(itertools.product(
-            subjects.split(","), moods.split(","), lightings.split(","),
+            subjects.split(","), moods_batch, lightings_batch,
             styles_batch, mediums_batch, artists_batch
         ))
 
