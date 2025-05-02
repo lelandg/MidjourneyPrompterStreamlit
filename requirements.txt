@@ -1,4 +1,1 @@
-streamlit>=1.20.0
-numpy
-pandas
-pillow
+streamlit

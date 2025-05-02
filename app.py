@@ -8,11 +8,6 @@ st.set_page_config(
     layout="centered",
 )
 
-# --- the rest of your imports and Streamlit code ---
-import numpy as np
-import pandas as pd
-# …etc…
-
 st.title("Midjourney Prompter")
 # …your app logic…
 import json
