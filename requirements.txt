@@ -2,6 +2,3 @@ streamlit>=1.20.0
 numpy
 pandas
 pillow
-openai
-pyyaml          # if you ever load YAML
-python-dotenv   # if you use a .env loader
