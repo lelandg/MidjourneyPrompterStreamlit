@@ -28,7 +28,7 @@ MidjourneyPrompterStreamlit is an interactive guide for crafting prompts and run
 ---
 ## Usage
 You can access the repo in my Streamlit app here:
-https://midjourneyprompterapp-uwwnhnmwbq88idxqm74nvn.streamlit.app/
+https://midjourneyprompterapp.streamlit.app/
 
 ## Installation
 
