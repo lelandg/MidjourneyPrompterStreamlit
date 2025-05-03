@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
 import traceback
-__version__ = "1.1"
+from version import __version__
 
 # Must be the first Streamlit command!
 st.set_page_config(
@@ -54,17 +54,6 @@ with tab1:
             "Choose a predefined scheme",
             [scheme["name"] for scheme in colors]
         )
-    # after `selected_scheme = ...`
-    preview_colors = []
-    for scheme in colors:
-        if scheme.get("name") == selected_scheme:
-            preview_colors = scheme.get("colors", [])
-            break
-    # or
-    # preview_colors = next(
-    #     (s["colors"] for s in colors if s["name"]==selected_scheme),
-    #     []
-    # )
     with col2:
         show_preview = st.checkbox("Show Preview", value=False)
 
