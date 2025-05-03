@@ -1,50 +1,19 @@
-# Must be the first Streamlit command!
 import itertools
 import json
-import os
 from pathlib import Path
 
 import streamlit as st
-import streamlit.components.v1 as components
-from PIL import Image
 
 from version import __version__
 
 # Must be the first Streamlit command!
-here = Path(__file__).resolve().parent
-favicon_path = os.path.join(here, "assets", "favicon.ico")
-
-if not os.path.exists(favicon_path):
-    favicon_path = None  # Optional fallback logic if no favicon is available
-
-# Use the valid path or fallback to a built-in emoji for the favicon
 st.set_page_config(
     page_title=f"Midjourney Prompter {__version__} (Editable)",
-    page_icon=favicon_path if favicon_path else "🎨",
-    layout="centered"
+    layout="centered",
 )
-
-# ----------------gação Title & Header ------------------------------
-# compute the path to the banner relative to this file
-here = Path(__file__).resolve().parent
-banner_path = os.path.join(here,"assets","banner.png")
-st.write(f'<style>h1 {{ color: #FF4B4B; }}{banner_path}</style>', unsafe_allow_html=True)
-
-# 3) Make sure it really exists
-if not os.path.exists(banner_path):
-    st.warning(f"🚧 Banner image not found at {banner_path!s}")
-else:
-    # 4) Open it with PIL so we know it’s a valid image
-    img = Image.open(banner_path)
-    st.image(img, use_container_width=False)
-
-# ---------- Your existing Streamlit app code below ----------
-# For example:
-st.title('Midjourney Prompter Streamlit')
-
 st.title(f"Midjourney Prompter v{__version__}")
 
-# ---------------- शूट editable values ---------------------------
+# --------------------------- Load editable values ---------------------------
 HERE = Path(__file__).parent
 
 
@@ -79,7 +48,7 @@ with tab1:
     mood = st.selectbox("Mood", moods)
     lighting_sel = st.selectbox("Lighting", lighting)
 
-    # ----------------व्ये Color Scheme -----------------------------------
+    # ----------------вля Color Scheme -----------------------------------
     st.subheader("Color Scheme")
     col1, col2 = st.columns([3, 1])
     with col1:
@@ -150,7 +119,7 @@ with tab1:
     # Image weight
     iw = st.number_input("Image Weight (--iw)", min_value=0.0, max_value=2.0, value=1.0, step=0.1)
 
-    # ----------------கில் Build final prompt -----------------------------
+    # ----------------------- Build final prompt -----------------------------
     base_parts = [subject, mood, lighting_sel, color]
     base_parts.extend(mediums_sel)
     base_parts.extend(styles_sel)
@@ -308,35 +277,3 @@ with tab3:
     st.text_area("colors.json", json.dumps(sorted(colors, key=lambda c: c['name']), indent=2), height=150)
 
     st.markdown("✂️ Copy updated JSON and commit to your repository to make it permanent.", unsafe_allow_html=True)
-
-# # Build the final prompt as per your logic
-# final_prompt = "Your generated Midjourney prompt here"  # Example placeholder
-#
-# # Display the prompt
-# st.text_area("Final Prompt", final_prompt, height=150)
-
-# Show the "Copy to Clipboard" button only if `final` is not empty
-if final.strip():
-    # Create a "Copy Prompt to Clipboard" button with working functionality
-    button_id = "copy-button"
-
-    # Create a custom button using HTML and JavaScript
-    components.html(
-        f"""
-        <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <button id="{button_id}" style="padding:10px 20px; color:white; background:blue; border:none; border-radius:5px; cursor: pointer;">
-                Copy Prompt to Clipboard
-            </button>
-        </div>
-        <script>
-            document.getElementById("{button_id}").addEventListener("click", function() {{
-                navigator.clipboard.writeText({json.dumps(final)}).then(() => {{
-                    alert('Prompt copied to clipboard!');
-                }}).catch(err => {{
-                    console.error('Could not copy text: ', err);
-                }});
-            }});
-        </script>
-        """,
-        height=60,
-    )
