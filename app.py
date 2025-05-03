@@ -15,7 +15,6 @@ import json
 from pathlib import Path
 import itertools
 
-st.write("🔥 Hello from the top of app.py!")
 st.title(f"Midjourney Prompter v{__version__}")
 
 # Load editable values

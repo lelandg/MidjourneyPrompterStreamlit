@@ -2,3 +2,4 @@
 .devcontainer
 .venv
 __pycache__
+.morgue
