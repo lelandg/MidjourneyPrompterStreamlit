@@ -181,8 +181,9 @@ with tab2:
 with tab3:
     st.header("Edit Lists")
     st.markdown(
-        "Edit the lists below to customize your options.<BR/><B>Note: Fields are not saved outside your session.</B>",
+        "Edit the lists below to customize your options. ",
     )
+    st.markdown("* **Note:** This will not update the GitHub JSON files.*")
 
     # Sort the lists for display
     artists_sorted = sorted(artists)
