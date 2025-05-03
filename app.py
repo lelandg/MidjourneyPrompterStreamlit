@@ -1,5 +1,6 @@
 # app.py
 import streamlit as st
+import traceback
 __version__ = "1.1"
 
 # Must be the first Streamlit command!
@@ -22,7 +23,7 @@ def load_json(name):
     try:
         return json.load(open(Path("data") / f"{name}.json"))
     except FileNotFoundError as e:
-        print(f"Error loading {name}.json\n{e.str()}")
+        print(f"Error loading {name}.json\n{traceback.format_exc()}")
         return []
 
 artists = load_json("artists")
