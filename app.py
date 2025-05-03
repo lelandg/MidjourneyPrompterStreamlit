@@ -1,30 +1,29 @@
 # app.py
 import streamlit as st
 import traceback
-import json
-from pathlib import Path
-import itertools
 from version import __version__
-# app logic…
 
 # Must be the first Streamlit command!
 st.set_page_config(
     page_title=f"Midjourney Prompter {__version__} (Editable)",
     layout="centered",
 )
+
 st.title("Midjourney Prompter")
+# …your app logic…
+import json
+from pathlib import Path
+import itertools
+
 st.write("🔥 Hello from the top of app.py!")
 st.title(f"Midjourney Prompter v{__version__}")
 
 # Load editable values
-from pathlib import Path
-HERE = Path(__file__).parent
 def load_json(name):
-    path = HERE / "data" / f"{name}.json"
     try:
-        return json.loads(path.read_text())
-    except FileNotFoundError:
-        st.error(f"Couldn’t find {path}")
+        return json.load(open(Path("data") / f"{name}.json"))
+    except FileNotFoundError as e:
+        print(f"Error loading {name}.json\n{traceback.format_exc()}")
         return []
 
 artists = load_json("artists")
