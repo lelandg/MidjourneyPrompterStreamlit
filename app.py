@@ -1,3 +1,4 @@
+# Must be the first Streamlit command!
 import itertools
 import json
 import os
@@ -9,30 +10,6 @@ from PIL import Image
 
 from version import __version__
 
-# -----------------------------------------------------------------------------
-# 1) Establish a single “assets root” for any local file references:
-BASE_DIR = Path(__file__).parent.resolve()
-
-# 2) Pick a page icon: try your static/favicon.ico, else fall back to an emoji
-favicon_path = BASE_DIR / "static" / "favicon.ico"
-page_icon = str(favicon_path) if favicon_path.exists() else "🎨"
-
-# 3) CALL THIS BEFORE ANY OTHER st.* COMMAND:
-st.set_page_config(
-    page_title="Midjourney Prompter Streamlit",
-    page_icon=page_icon,
-    layout="wide",
-    initial_sidebar_state="auto",
-)
-# -----------------------------------------------------------------------------
-
-# 4) (Optional) now that the config is set, load/display a banner if you have one
-banner_path = BASE_DIR / "static" / "banner.png"
-if banner_path.exists():
-    st.image(str(banner_path), use_column_width=True)
-
-# … the rest of your app code goes here …
-# Make sure anywhere you had used “here / 'foo'” you now use “BASE_DIR / 'foo'”
 # Must be the first Streamlit command!
 here = Path(__file__).resolve().parent
 favicon_path = os.path.join(here, "assets", "favicon.ico")
@@ -41,17 +18,17 @@ if not os.path.exists(favicon_path):
     favicon_path = None  # Optional fallback logic if no favicon is available
 
 # Use the valid path or fallback to a built-in emoji for the favicon
-# st.set_page_config(
-#     page_title=f"Midjourney Prompter {__version__} (Editable)",
-#     page_icon=favicon_path if favicon_path else "🎨",
-#     layout="centered"
-# )
+st.set_page_config(
+    page_title=f"Midjourney Prompter {__version__} (Editable)",
+    page_icon=favicon_path if favicon_path else "🎨",
+    layout="centered"
+)
 
 # ----------------gação Title & Header ------------------------------
 # compute the path to the banner relative to this file
 here = Path(__file__).resolve().parent
 banner_path = os.path.join(here,"assets","banner.png")
-# st.write(f'<style>h3 {{ color: #FF4B4B; }}{banner_path}</style>', unsafe_allow_html=True)
+st.write(f'<style>h1 {{ color: #FF4B4B; }}{banner_path}</style>', unsafe_allow_html=True)
 
 # 3) Make sure it really exists
 if not os.path.exists(banner_path):
@@ -59,11 +36,11 @@ if not os.path.exists(banner_path):
 else:
     # 4) Open it with PIL so we know it’s a valid image
     img = Image.open(banner_path)
-    # 3‐column layout; middle column is where we put the banner
-    col1, col2, col3 = st.columns([3, 8, 1])
+    st.image(img, use_container_width=False)
 
-    with col2:
-        st.image(img, use_container_width=False)
+# ---------- Your existing Streamlit app code below ----------
+# For example:
+st.title('Midjourney Prompter Streamlit')
 
 st.title(f"Midjourney Prompter v{__version__}")
 
@@ -103,7 +80,8 @@ with tab1:
     lighting_sel = st.selectbox("Lighting", lighting)
 
     # ----------------व्ये Color Scheme -----------------------------------
-    col1, col2 = st.columns([9, 1])
+    st.subheader("Color Scheme")
+    col1, col2 = st.columns([3, 1])
     with col1:
         selected_scheme = st.selectbox(
             "Choose a predefined scheme",
@@ -211,7 +189,7 @@ with tab2:
     st.header("Batch Prompt Generator")
     st.markdown("Enter comma-separated values for batch combination:")
 
-    margin1, col1, col2, margin2 = st.columns([1, 4, 4, 1])
+    col1, col2 = st.columns(2)
     with col1:
         subjects = st.text_input("Subjects", "robot, dragon, astronaut")
         moods_batch = st.multiselect("Moods", moods, default=["Serene", "Dystopian"], key="moods_batch")
@@ -399,3 +377,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
     )
+
