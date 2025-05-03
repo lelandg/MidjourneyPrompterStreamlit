@@ -1,7 +1,3 @@
-streamlit>=1.20.0
-numpy
-pandas
-pillow
-openai
-pyyaml          # if you ever load YAML
-python-dotenv   # if you use a .env loader
+streamlit>=1.25.0
+openai>=0.27.0
+Pillow>=10.0.0
