@@ -81,17 +81,15 @@ with tab1:
                 for col, hexcode in zip(cols, preview_colors[i:i+2]):
                     col.markdown(
                         f"<div style='background:{hexcode};width:40px;height:40px;"
-                        "border:1px solid #ccc;border-radius:4px;'></div>",
-                        unsafe_allow_html=True,
+                        "border:1px solid #ccc;border-radius:4px;'></div>"
                     )
-                st.markdown("<div style='margin-bottom:12px;'></div>", unsafe_allow_html=True)
+                st.markdown("<div style='margin-bottom:12px;'></div>")
         else:
             cols = st.columns(max(1, len(preview_colors)))
             for col, hexcode in zip(cols, preview_colors):
                 col.markdown(
                     f"<div style='background:{hexcode};width:40px;height:40px;"
-                    "border:1px solid #ccc;border-radius:4px;'></div>",
-                    unsafe_allow_html=True,
+                    "border:1px solid #ccc;border-radius:4px;'></div>"
                 )
     # ----------------------------------------------------------------
 
@@ -184,7 +182,6 @@ with tab3:
     st.header("Edit Lists")
     st.markdown(
         "Edit the lists below to customize your options.<BR/><B>Note: Fields are not saved outside your session.</B>",
-        unsafe_allow_html=True
     )
 
     # Sort the lists for display
@@ -215,5 +212,4 @@ with tab3:
 
     st.markdown(
         "✂️ Copy this updated JSON and manually update the GitHub version to persist.",
-        unsafe_allow_html=True
     )
