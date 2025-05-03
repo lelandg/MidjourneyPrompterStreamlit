@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered",
 )
 
-st.title("Midjourney Prompter")
+
 # …your app logic…
 import json
 from pathlib import Path
