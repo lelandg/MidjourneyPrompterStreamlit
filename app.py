@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
 import traceback
-from version import __version__
+from version import __version__ 
 
 # Must be the first Streamlit command!
 st.set_page_config(
