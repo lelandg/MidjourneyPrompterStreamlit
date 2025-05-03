@@ -331,7 +331,7 @@ if final.strip():
         <script>
             document.getElementById("{button_id}").addEventListener("click", function() {{
                 navigator.clipboard.writeText({json.dumps(final)}).then(() => {{
-                    alert('Prompt copied to clipboard! 📋');
+                    alert('Prompt copied to clipboard!');
                 }}).catch(err => {{
                     console.error('Could not copy text: ', err);
                 }});
@@ -340,41 +340,3 @@ if final.strip():
         """,
         height=60,
     )
-# ------------------------------ Footer --------------------------------------
-st.markdown(
-    """
-    <style>
-        footer {
-            visibility: hidden;
-        }
-        .css-1aumxhk {
-            display: none;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-# Add a footer with a link to the GitHub repository
-GITHUB_URL = "https://github.com/lelandg/MidjourneyPrompterStreamlit/"
-
-st.markdown(
-    f"""
-    <style>
-        .footer {{
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #f1f1f1;
-            text-align: center;
-            padding: 5px 0;
-        }}
-    </style>
-    <div class="footer">
-        <div id="footer-message" style="padding:8px; text-align:center; color:#555;"></div>
-        <p>Made with ❤️ by <a href="{GITHUB_URL}">Midjourney Prompter</a> (v{__version__})</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-    )
-
